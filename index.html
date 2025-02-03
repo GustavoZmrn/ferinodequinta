@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferino - Encontro Semanal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #222;
+            color: white;
+        }
+        .container {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        .user-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-container">
+        <h1>Ferino - Encontro Semanal</h1>
+        <p>Faça login para acessar</p>
+        <input type="text" id="login-usuario" placeholder="Usuário">
+        <input type="password" id="login-senha" placeholder="Senha">
+        <button onclick="fazerLogin()">Entrar</button>
+        <p id="login-status"></p>
+        <p>Ainda não tem conta? <a href="#" onclick="mostrarCadastro()">Cadastre-se</a></p>
+    </div>
+
+    <div class="container" id="cadastro-container" style="display: none;">
+        <h1>Cadastro</h1>
+        <input type="text" id="cadastro-usuario" placeholder="Escolha um usuário">
+        <input type="password" id="cadastro-senha" placeholder="Escolha uma senha">
+        <button onclick="cadastrarUsuario()">Cadastrar</button>
+        <p id="cadastro-status"></p>
+        <p>Já tem conta? <a href="#" onclick="mostrarLogin()">Faça login</a></p>
+    </div>
+
+    <div class="container" id="dashboard-container" style="display: none;">
+        <h1>Bem-vindo ao Ferino</h1>
+        <button onclick="fazerPix()">Fazer um Pix</button>
+        <p id="pix-status"></p>
+
+        <h2>Status do Pagamento</h2>
+        <p id="status-pagamento"></p>
+    </div>
+    
+    <script>
+        let usuarios = [
+            { nome: "admin", senha: "1234", status: "Pago" },
+            { nome: "usuario1", senha: "senha1", status: "Devendo" }
+        ];
+
+        function fazerLogin() {
+            let usuario = document.getElementById("login-usuario").value;
+            let senha = document.getElementById("login-senha").value;
+            let usuarioEncontrado = usuarios.find(u => u.nome === usuario && u.senha === senha);
+            
+            if (usuarioEncontrado) {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("dashboard-container").style.display = "block";
+                document.getElementById("status-pagamento").innerText = "Seu status de pagamento: " + usuarioEncontrado.status;
+            } else {
+                document.getElementById("login-status").innerText = "Usuário ou senha incorretos.";
+            }
+        }
+
+        function cadastrarUsuario() {
+            let usuario = document.getElementById("cadastro-usuario").value;
+            let senha = document.getElementById("cadastro-senha").value;
+            if (usuario && senha) {
+                if (usuarios.some(u => u.nome === usuario)) {
+                    document.getElementById("cadastro-status").innerText = "Usuário já existe!";
+                } else {
+                    usuarios.push({ nome: usuario, senha: senha, status: "Devendo" });
+                    document.getElementById("cadastro-status").innerText = "Cadastro realizado com sucesso!";
+                    setTimeout(mostrarLogin, 2000);
+                }
+            } else {
+                document.getElementById("cadastro-status").innerText = "Preencha todos os campos!";
+            }
+        }
+
+        function fazerPix() {
+            let chavePix = "e0afe93a-5fc7-4886-bc8a-c3ae3addd3ba";
+            document.getElementById("pix-status").innerText = "Chave Pix: " + chavePix;
+        }
+
+        function mostrarCadastro() {
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("cadastro-container").style.display = "block";
+        }
+
+        function mostrarLogin() {
+            document.getElementById("cadastro-container").style.display = "none";
+            document.getElementById("login-container").style.display = "block";
+        }
+    </script>
+</body>
+</html>
